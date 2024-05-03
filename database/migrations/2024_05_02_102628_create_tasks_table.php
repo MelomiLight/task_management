@@ -24,6 +24,11 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->index('due_date', 'task_due_date_index');
+            $table->index('status', 'task_status_index');
+            $table->index('user_id', 'task_user_id_index');
         });
     }
 
