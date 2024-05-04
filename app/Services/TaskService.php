@@ -64,15 +64,15 @@ class TaskService
     {
         try {
             if ($request->user()->role !== 'admin') {
-                throw new AuthenticationException('Access denied. You do not have the necessary permissions to view this section.');
+                throw new AuthenticationException('You do not have the necessary permissions to view this section.');
             }
 
             $task = Task::where('id', $request['task_id'])->first();
             $task->user_id = $request['user_id'];
             $task->save();
 
-        } catch (Exception) {
-            throw new Exception('Could not set task', 500);
+        } catch (Exception $e) {
+            throw new Exception('Could not set task. ' . $e->getMessage(), 500);
         }
     }
 
@@ -113,8 +113,8 @@ class TaskService
             }
 
             throw new Exception('No such id in tasks table', 400);
-        } catch (Exception) {
-            throw new Exception('Could not get task', 500);
+        } catch (Exception $e) {
+            throw new Exception('Could not get task. ' . $e->getMessage(), 500);
         }
     }
 
@@ -136,7 +136,7 @@ class TaskService
             ]);
 
             return $task;
-        }catch (Exception){
+        } catch (Exception) {
             throw new Exception('Could not update task', 500);
         }
     }
@@ -155,8 +155,8 @@ class TaskService
             }
 
             throw new Exception('No such id in tasks table', 400);
-        } catch (Exception) {
-            throw new Exception('Could not delete task', 500);
+        } catch (Exception $e) {
+            throw new Exception('Could not get task. ' . $e->getMessage(), 500);
         }
     }
 }

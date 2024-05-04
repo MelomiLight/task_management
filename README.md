@@ -1,66 +1,187 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Task Management API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This API allows you to manage tasks within a project management application. It provides endpoints for creating, updating, deleting tasks, setting task assignments, and retrieving task information.
 
-## About Laravel
+## Authentication
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Authentication for this API is handled using Sanctum. You need to obtain a token by registering, logging in, or resetting your password using the provided endpoints. Once you have a token, include it in the Authorization header with the Bearer scheme for authenticated requests.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Register
+- **POST** `localhost:8000/api/sanctum/register`
+    - **Body**:
+      ```json
+      {
+          "name":"merey",
+          "email":"test@test.com",
+          "password":"12345678"
+      }
+      ```
+    - **Response**:
+      ```json
+      {
+          "token": "6|VnNMwTiucDoTb7Fr3eGmjWw3QPufrGdRXpk1nIoY4dbf515a"
+      }
+      ```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Login
+- **POST** `localhost:8000/api/sanctum/login`
+    - **Body**:
+      ```json
+      {
+          "email":"test@test.com",
+          "password":"12345678"
+      }
+      ```
+    - **Response**:
+      ```json
+      {
+          "token": "7|WkFOno1S5xXwa3eBAkuKmgMbrAX08EDA1spu6lba585df327"
+      }
+      ```
 
-## Learning Laravel
+### Forgot Password
+- **POST** `localhost:8000/api/sanctum/forgot`
+    - **Body**:
+      ```json
+      {
+          "email":"test@test.com"
+      }
+      ```
+    - **Response**:
+      ```json
+      {
+          "message": "Password reset email sent successfully"
+      }
+      ```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Reset Password
+- **POST** `localhost:8000/api/sanctum/password/reset`
+    - **Body**:
+      ```json
+      {
+          "email":"test@test.com",
+          "password":"NEW12345678",
+          "reset_code":"jcfLH5"
+      }
+      ```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Task Routes
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Create Task
+- **POST** `localhost:8000/api/tasks/`
+    - **Body**:
+      ```json
+      {
+          "title": "Complete API Development",
+          "description": "Develop the API endpoints for the new project management application.",
+          "status": "new",
+          "priority": 2,
+          "start_date": "",
+          "due_duration": "1 days 5 hours 0 minutes",
+          "user_id":null
+      }
+      ```
+    - **Response**:
+      ```json
+      {
+          "message": "Task created successfully!",
+          "task": {
+              "title": "Complete API Development",
+              "description": "Develop the API endpoints for the new project management application.",
+              "status": "new",
+              "priority": 2,
+              "start_date": "2024-05-04 15:50:40",
+              "due_date": "2024-05-05 20:50:40",
+              "user_id": null,
+              "updated_at": "2024-05-04T10:50:40.000000Z",
+              "created_at": "2024-05-04T10:50:40.000000Z",
+              "id": 12
+          }
+      }
+      ```
 
-## Laravel Sponsors
+### Update Task
+- **PUT** `localhost:8000/api/tasks/`
+    - **Body**:
+      ```json
+      {
+          "title": "Complete API Development",
+          "description": "Develop the API endpoints for the new project management application.",
+          "status": "new",
+          "priority": 2,
+          "start_date": "",
+          "due_duration": "1 days 5 hours 0 minutes",
+          "user_id":null
+      }
+      ```
+    - **Response**:
+      ```json
+      {
+          "message": "Task updated successfully!",
+          "task": {
+              "title": "Complete API Development",
+              "description": "Develop the API endpoints for the new project management application.",
+              "status": "new",
+              "priority": 2,
+              "start_date": "2024-05-04 15:50:40",
+              "due_date": "2024-05-05 20:50:40",
+              "user_id": null,
+              "updated_at": "2024-05-04T10:50:40.000000Z",
+              "created_at": "2024-05-04T10:50:40.000000Z",
+              "id": 12
+          }
+      }
+      ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Delete Task
+- **DELETE** `localhost:8000/api/tasks/`
+    - **Query Params**: `id=1`
+    - **Response**:
+      ```json
+      {
+          "message": "Task deleted successfully!"
+      }
+      ```
 
-### Premium Partners
+### Set Task
+- **PATCH** `localhost:8000/api/tasks/set`
+    - **Body**:
+      ```json
+      {
+          "task_id":1,
+          "user_id":1
+      }
+      ```
+    - **Response**:
+      ```json
+      {
+          "message": "Task successfully set"
+      }
+      ```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### Get All Tasks
+- **GET** `localhost:8000/api/tasks/get?page=1`
+    - **Response**: Tasks with pagination
 
-## Contributing
+### Get Task by ID
+- **GET** `localhost:8000/api/tasks/get/12`
+    - **Response**:
+      ```json
+      {
+          "id": 12,
+          "title": "Complete API Development",
+          "description": "Develop the API endpoints for the new project management application.",
+          "status": "new",
+          "priority": 2,
+          "start_date": "2024-05-04 15:50:40",
+          "due_date": "2024-05-05 20:50:40",
+          "user_id": null,
+          "created_at": "2024-05-04T10:50:40.000000Z",
+          "updated_at": "2024-05-04T10:50:40.000000Z",
+          "deleted_at": null
+      }
+      ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Note
+- Ensure to replace placeholders like `host_name`, `database_name`, `username`, `password`, etc., with your actual credentials in the `.env` file.
+- All routes under `/api/tasks` require authentication using Sanctum. Include the token in the Authorization header for these requests.

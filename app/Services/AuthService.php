@@ -38,8 +38,8 @@ class AuthService
             }
 
             return $user->createToken('API token of ' . $user->name)->plainTextToken;
-        } catch (\Exception) {
-            throw new Exception('Could not create token', 500);
+        } catch (\Exception $e) {
+            throw new Exception('Could not create token. ' . $e->getMessage(), 500);
         }
     }
 
